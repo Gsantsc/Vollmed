@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - testes
+
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
@@ -10,13 +11,16 @@ jobs:
       fail-fast: false
       matrix:
         containers: [1, 2]
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v4      
-      - name: Checkout
         uses: actions/checkout@v4
-        with: 
-          path: server      
+
+      - name: Checkout Backend
+        uses: actions/checkout@v4
+        with:
+          path: server
+
       - name: Start Server BackEnd
         run: |
           cd server
@@ -28,11 +32,13 @@ jobs:
           done
           echo "Server is running successfully."
         working-directory: server
+
       - name: Start Web App FrontEnd
         run: |
           cd web
           npm install
-          npm start &        
+          npm start &
+
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
@@ -47,4 +53,3 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#Sempre verifique a indentação do seu arquivo yaml
